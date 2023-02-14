@@ -5,7 +5,7 @@ name: build-deploy-docs
 on:
   push:
     branches:
-      - main
+      - v2
 jobs:
   deploy:
     runs-on: ubuntu-latest
