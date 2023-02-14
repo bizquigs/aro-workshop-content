@@ -1,17 +1,17 @@
 # Project Information
-site_name: ARO Workshop Atlanta
+site_name: ARO Workshop
 <<<<<<< HEAD
-site_url: https://ws.mobb.cloud/
+site_url: https://ws.verynicecluster.cloud/
 site_description: A choose-your-own-adventure workshop for Operations and Development teams on ARO.
 =======
-site_url: https://michaelryanmcneill.github.io/aro-hackathon-content
+site_url: https://bizquigs.github.io/aro-hackathon-content
 site_description: A for Operations and Development teams on ARO.
 >>>>>>> a78436f (initial v2)
 site_author: Red Hat
 
 # Repository
-repo_name: michaelryanmcneill/aro-hackathon-content
-repo_url: https://github.com/michaelryanmcneill/aro-hackathon-content
+repo_name: bizquigs/aro-hackathon-content
+repo_url: https://github.com/bizquigs/aro-hackathon-content
 
 # Nav Menu Definition
 nav:
