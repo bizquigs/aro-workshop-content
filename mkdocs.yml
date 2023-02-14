@@ -16,7 +16,7 @@ nav:
     - Create an ARO Cluster: ops/1-1-create-cluster.md
     - Retieve Cluster Credentials: ops/1-3-get-credentials.md
   - Prepare the Cluster and Evironment:
-    - Install Pipelines and Service Mesh Operators
+    - Install Pipelines and Service Mesh Operators:
       - Deploy Pipeline Operator: ops/2-1-operators.md
       - Deploy Service Mesh Operator: service-meshv2/0-infrastructure_operator_install.md
     - Label Nodes: ops/2-4-label-nodes.md
