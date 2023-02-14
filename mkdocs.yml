@@ -21,7 +21,7 @@ nav:
       - Deploy Service Mesh Operator: service-meshv2/0-infrastructure_operator_install.md
     - Label Nodes: ops/2-4-label-nodes.md
     - Azure Service Operator: ops/3-deploy-azure-service-operator.md
-    - Deploy Cosmos! Database: ops/2-5-deploy-cosmos-aso.md
+    - Deploy Cosmos Database: ops/2-5-deploy-cosmos-aso.md
     - Azure ARC Integration: ops/5-arc-integration.md
   - Managing Worker Nodes: ops/2-2-worker-nodes.md
   - Deploy an Application:
