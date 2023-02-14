@@ -1,12 +1,7 @@
 # Project Information
 site_name: ARO Workshop
-<<<<<<< HEAD
 site_url: https://ws.verynicecluster.cloud/
-site_description: A choose-your-own-adventure workshop for Operations and Development teams on ARO.
-=======
-site_url: https://bizquigs.github.io/aro-hackathon-content
-site_description: A for Operations and Development teams on ARO.
->>>>>>> a78436f (initial v2)
+site_description: A workshop for Operations and Development teams on ARO.
 site_author: Red Hat
 
 # Repository
@@ -15,39 +10,7 @@ repo_url: https://github.com/bizquigs/aro-hackathon-content
 
 # Nav Menu Definition
 nav:
-<<<<<<< HEAD
   - Welcome: index.md
-  - Environment Setup: setup/environment.md
-  - Access Your Cluster: setup/access-cluster.md
-  - Day Two ARO Operations:
-    - Managing Cluster Upgrades: ops/day2/upgrades.md
-    - Managing Worker Nodes: ops/day2/scaling-nodes.md
-    - Cluster Autoscaling: ops/day2/autoscaling.md
-    - Labeling Nodes: ops/day2/labels.md
-  - Azure Service Operator (ASO):
-    - Deploy the Azure Service Operator: ops/aso/deploy.md
-    - Deploy an Azure Service using ASO: ops/aso/app.md
-  - Azure Front Door:
-    - Create a Private Ingress Controller: ops/afd/private-ingress.md
-    - Configure Azure Front Door: ops/afd/configure.md
-  - Deploy and Expose an App:
-    - Deploy the App: app/deploy.md
-    - Expose the App with Front Door: app/afd.md
-    - Automate Deploying the App: app/cicd.md
-  - Make an App Resilient: app/resilience.md
-  - Azure Arc: 
-    - Connect Azure Arc with ARO: ops/arc/integration.md
-    - Enable Azure Arc Observability: ops/arc/observability.md
-    - Integrate Azure Key Vault: ops/arc/key-vault.md
-  - Service Mesh:
-    - Service Mesh: service-mesh/introduction.md
-    - Deploy Service Mesh Operator: service-mesh/install.md
-    - Deploy Control Plane: service-mesh/deploy-control-plane.md
-    - Deploy Workloads: service-mesh/deploy-workload.md
-    - Deploy Weighted Load Balancing: service-mesh/weighted-routing.md
-    - Access Kiali Dashboard: service-mesh/kiali.md
-=======
-  - index.md
   - Workshop Setup: general/1-workshop-setup.md
   - Getting Started
     - Create an ARO Cluster: ops/1-1-create-cluster.md
@@ -84,9 +47,6 @@ nav:
   - ARO Day X Operations:
       - Managing Upgrades: ops/2-1-upgrades.md
     
-
->>>>>>> a78436f (initial v2)
-
 
 # Theme Configuration
 theme:
