@@ -6,7 +6,7 @@ site_author: Red Hat
 
 # Repository
 repo_name: bizquigs/aro-hackathon-content
-repo_url: https://github.com/bizquigs/aro-hackathon-content
+repo_url: https://github.com/bizquigs/aro-workshop-content
 
 # Nav Menu Definition
 nav:
