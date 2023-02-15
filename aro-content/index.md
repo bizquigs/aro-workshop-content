@@ -10,6 +10,7 @@ Join Red Hat® and Microsoft for a hands-on workshop with Azure Red Hat OpenShif
 
 ### Content Overview:
 
+- Learn how simple it is to deploy and configure Azure Red Hat Openshift
 - Complete Day 2 operations tasks such as configuring node and cluster scaling policies, configuring managed upgrades, and using labels for deterministic app placement on nodes
 - Learn how to leverage Azure Service Operator to manage and use Azure Services directly from OpenShift
 - Deploy an application using CI/CD and expose the application using the Azure Front Door Service
