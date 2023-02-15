@@ -1,0 +1,976 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A workshop for Operations and Development teams on ARO.">
+      
+      
+        <meta name="author" content="Red Hat">
+      
+      
+        <link rel="canonical" href="https://ws.verynicecluster.cloud/ops/day2/scaling-nodes/">
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.9">
+    
+    
+      
+        <title>Scaling nodes - ARO Workshop</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.08040f6c.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,300i,400,400i,700,700i%7COverpass+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Overpass";--md-code-font:"Overpass Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="red">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="ARO Workshop" class="md-header__button md-logo" aria-label="ARO Workshop" data-md-component="logo">
+      
+  <img src="../../../favicon.ico" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ARO Workshop
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Scaling nodes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/bizquigs/aro-workshop-content" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bizquigs/aro-hackathon-content
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ARO Workshop" class="md-nav__button md-logo" aria-label="ARO Workshop" data-md-component="logo">
+      
+  <img src="../../../favicon.ico" alt="logo">
+
+    </a>
+    ARO Workshop
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/bizquigs/aro-workshop-content" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bizquigs/aro-hackathon-content
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Workshop Setup
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Workshop Setup" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Workshop Setup
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../general/1-workshop-setup/" class="md-nav__link">
+        Azure portal and CLI setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1-3-get-credentials/" class="md-nav__link">
+        Retieve ARO Cluster Credentials
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Prepare the Cluster and Evironment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prepare the Cluster and Evironment" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Prepare the Cluster and Evironment
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3-deploy-azure-service-operator/" class="md-nav__link">
+        Azure Service Operator
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2-5-deploy-cosmos/" class="md-nav__link">
+        Deploy Cosmos Database
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Managing Worker Nodes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Managing Worker Nodes" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Managing Worker Nodes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2-4-label-nodes/" class="md-nav__link">
+        Label Nodes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Deploy an Application
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deploy an Application" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Deploy an Application
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../app/2-1-deploy-frontend/" class="md-nav__link">
+        Deploy the frontend
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../app/2-2-deploy-backend/" class="md-nav__link">
+        Deploy the backend
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Make the application resilent
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Make the application resilent" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Make the application resilent
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2-3-autoscaling.md" class="md-nav__link">
+        Setup cluster autoscaling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../app/3-scale-app/" class="md-nav__link">
+        Make Applications Resilient
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          ARO Day X Operations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="ARO Day X Operations" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          ARO Day X Operations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrades/" class="md-nav__link">
+        Managing Upgrades
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#many-of-these-changes-are-done-using-machinesets-machinesets-ensure-that-a-specified-number-of-machine-replicas-are-running-at-any-given-time-think-of-a-machineset-as-a-template-for-the-kinds-of-machines-that-make-up-the-worker-nodes-of-your-cluster-these-are-similar-to-other-kubernetes-resources-like-a-replicaset-is-to-pods-one-important-caveat-is-that-machinesets-allow-users-to-manage-many-machines-as-a-single-entity-but-are-contained-to-a-specific-availability-zone-if-youd-like-to-learn-more-see-the-red-hat-documentation-on-machine-management" class="md-nav__link">
+    Many of these changes are done using MachineSets. MachineSets ensure that a specified number of Machine replicas are running at any given time. Think of a MachineSet as a "template" for the kinds of Machines that make up the worker nodes of your cluster. These are similar to other Kubernetes resources, like a ReplicaSet is to Pods. One important caveat, is that MachineSets allow users to manage many Machines as a single entity, but are contained to a specific availability zone. If you'd like to learn more, see the Red Hat documentation on machine management.
+  </a>
+  
+    <nav class="md-nav" aria-label="Many of these changes are done using MachineSets. MachineSets ensure that a specified number of Machine replicas are running at any given time. Think of a MachineSet as a "template" for the kinds of Machines that make up the worker nodes of your cluster. These are similar to other Kubernetes resources, like a ReplicaSet is to Pods. One important caveat, is that MachineSets allow users to manage many Machines as a single entity, but are contained to a specific availability zone. If you'd like to learn more, see the Red Hat documentation on machine management.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scaling-worker-nodes" class="md-nav__link">
+    Scaling worker nodes
+  </a>
+  
+    <nav class="md-nav" aria-label="Scaling worker nodes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#view-the-machine-sets-that-are-in-the-cluster" class="md-nav__link">
+    View the machine sets that are in the cluster
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#view-the-machines-that-are-in-the-cluster" class="md-nav__link">
+    View the machines that are in the cluster
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale-the-number-of-nodes-up-via-the-cli" class="md-nav__link">
+    Scale the number of nodes up via the CLI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-return-to-your-tab-with-the-openshift-web-console-if-you-need-to-reauthenticate-follow-the-steps-in-the-access-your-cluster-section" class="md-nav__link">
+    1. Return to your tab with the OpenShift Web Console. If you need to reauthenticate, follow the steps in the Access Your Cluster section.
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#congratulations-youve-successfully-scaled-your-cluster-up-and-back-down-to-three-nodes" class="md-nav__link">
+    Congratulations! You've successfully scaled your cluster up and back down to three nodes.
+  </a>
+  
+    <nav class="md-nav" aria-label="Congratulations! You've successfully scaled your cluster up and back down to three nodes.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scale-the-number-of-nodes-down-via-the-web-console" class="md-nav__link">
+    Scale the number of nodes down via the Web Console
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/bizquigs/aro-workshop-content/edit/master/docs/ops/day2/scaling-nodes.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:aro-content/ops/day2/scaling-nodes.md
+When deploying your Azure Red Hat OpenShift (ARO) cluster, you can configure many aspects of your worker nodes, but what happens when you need to change your worker nodes after they've already been created? These activities include scaling the number of nodes, changing the instance type, adding labels or taints, just to name a few.</p>
+<h1 id="many-of-these-changes-are-done-using-machinesets-machinesets-ensure-that-a-specified-number-of-machine-replicas-are-running-at-any-given-time-think-of-a-machineset-as-a-template-for-the-kinds-of-machines-that-make-up-the-worker-nodes-of-your-cluster-these-are-similar-to-other-kubernetes-resources-like-a-replicaset-is-to-pods-one-important-caveat-is-that-machinesets-allow-users-to-manage-many-machines-as-a-single-entity-but-are-contained-to-a-specific-availability-zone-if-youd-like-to-learn-more-see-the-red-hat-documentation-on-machine-management">Many of these changes are done using MachineSets. MachineSets ensure that a specified number of Machine replicas are running at any given time. Think of a MachineSet as a "template" for the kinds of Machines that make up the worker nodes of your cluster. These are similar to other Kubernetes resources, like a ReplicaSet is to Pods. One important caveat, is that MachineSets allow users to manage many Machines as a single entity, but are contained to a specific availability zone. If you'd like to learn more, see the <a href="https://docs.openshift.com/container-platform/latest/machine_management/index.html" target="_blank">Red Hat documentation on machine management</a>.<a class="headerlink" href="#many-of-these-changes-are-done-using-machinesets-machinesets-ensure-that-a-specified-number-of-machine-replicas-are-running-at-any-given-time-think-of-a-machineset-as-a-template-for-the-kinds-of-machines-that-make-up-the-worker-nodes-of-your-cluster-these-are-similar-to-other-kubernetes-resources-like-a-replicaset-is-to-pods-one-important-caveat-is-that-machinesets-allow-users-to-manage-many-machines-as-a-single-entity-but-are-contained-to-a-specific-availability-zone-if-youd-like-to-learn-more-see-the-red-hat-documentation-on-machine-management" title="Permanent link">#</a></h1>
+<p>There may be times when you need to change aspects of your worker nodes. Things like scaling, changing the type, adding labels or taints to name a few. Most of these things are done through the use of machine sets. A machine is a unit that describes the host for a node and a machine set is a group of machines. Think of a machine set as a “template” for the kinds of machines that make up the worker nodes of your cluster. Similar to how a replicaset is to pods. A machine set allows users to manage many machines as a single entity though it is contained to a specific availability zone. If you'd like to learn more see <a href="https://docs.openshift.com/container-platform/latest/machine_management/index.html">Overview of machine management</a></p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>a78436f (initial v2):aro-content/ops/2-2-worker-nodes.md</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<h2 id="scaling-worker-nodes">Scaling worker nodes<a class="headerlink" href="#scaling-worker-nodes" title="Permanent link">#</a></h2>
+<h3 id="view-the-machine-sets-that-are-in-the-cluster">View the machine sets that are in the cluster<a class="headerlink" href="#view-the-machine-sets-that-are-in-the-cluster" title="Permanent link">#</a></h3>
+<p>Let's see which machine sets we have in our cluster.  If you are following this lab, you should only have three so far (one for each availability zone).</p>
+<p>From the terminal run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>oc get machinesets -n openshift-machine-api
+</code></pre></div>
+<p>You will see a response like:</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$ oc get machinesets -n openshift-machine-api
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>ok0620-rq5tl-worker-westus21   1         1         1       1           72m
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>ok0620-rq5tl-worker-westus22   1         1         1       1           72m
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>ok0620-rq5tl-worker-westus23   1         1         1       1           72m
+</code></pre></div>
+This is telling us that there is a machine set defined for each availability zone in westus2 and that each has one machine.</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:aro-content/ops/day2/scaling-nodes.md
+    For this workshop, we've deployed your ARO cluster with six total machines (three workers machines and three control plane machines), one in each availability zone. The output will look something like this:
+=======</p>
+<h3 id="view-the-machines-that-are-in-the-cluster">View the machines that are in the cluster<a class="headerlink" href="#view-the-machines-that-are-in-the-cluster" title="Permanent link">#</a></h3>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>a78436f (initial v2):aro-content/ops/2-2-worker-nodes.md</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Let's see which machines (nodes) we have in our cluster.</p>
+<p>From the terminal run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>oc get machine -n openshift-machine-api
+</code></pre></div>
+<p>You will see a response like:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ oc get machine -n openshift-machine-api
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>NAME                                 PHASE     TYPE              REGION    ZONE   AGE
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>ok0620-rq5tl-master-0                Running   Standard_D8s_v3   westus2   1      73m
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ok0620-rq5tl-master-1                Running   Standard_D8s_v3   westus2   2      73m
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>ok0620-rq5tl-master-2                Running   Standard_D8s_v3   westus2   3      73m
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>ok0620-rq5tl-worker-westus21-n6lcs   Running   Standard_D4s_v3   westus2   1      73m
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>ok0620-rq5tl-worker-westus22-ggcmv   Running   Standard_D4s_v3   westus2   2      73m
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>ok0620-rq5tl-worker-westus23-hzggb   Running   Standard_D4s_v3   westus2   3      73m
+</code></pre></div>
+<p>As you can see we have 3 master nodes, 3 worker nodes, the types of nodes, and which region/zone they are in.</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:aro-content/ops/day2/scaling-nodes.md
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>oc -n openshift-machine-api scale --replicas<span class="o">=</span><span class="m">2</span> <span class="si">${</span><span class="nv">MACHINESET</span><span class="si">}</span>
+</code></pre></div>
+=======</p>
+<h3 id="scale-the-number-of-nodes-up-via-the-cli">Scale the number of nodes up via the CLI<a class="headerlink" href="#scale-the-number-of-nodes-up-via-the-cli" title="Permanent link">#</a></h3>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>a78436f (initial v2):aro-content/ops/2-2-worker-nodes.md</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Now that we know that we have 3 worker nodes, let's scale the cluster up to have 4 worker nodes. We can accomplish this through the CLI or through the OpenShift Web Console. We'll explore both.</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:aro-content/ops/day2/scaling-nodes.md
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>oc -n openshift-machine-api get machinesets
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code>The output should look something like this:
+</code></pre></div>
+<p>=======
+From the terminal run the following to imperatively scale up a machine set to 2 worker nodes for a total of 4. Remember that each machine set is tied to an availability zone so with 3 machine sets with 1 machine each, in order to get to a TOTAL of 4 nodes we need to select one of the machine sets to scale up to 2 machines.</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>a78436f (initial v2):aro-content/ops/2-2-worker-nodes.md</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>oc scale --replicas<span class="o">=</span><span class="m">2</span> machineset &lt;machineset&gt; -n openshift-machine-api
+</code></pre></div>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:aro-content/ops/day2/scaling-nodes.md
+    Note, that the number of <em>desired</em> and <em>current</em> nodes matches the scale we specified, but only one is <em>ready</em> and <em>available</em>.
+=======
+For example:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>a78436f (initial v2):aro-content/ops/2-2-worker-nodes.md</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$ oc scale --replicas=2 machineset ok0620-rq5tl-worker-westus23 -n openshift-machine-api
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>machineset.machine.openshift.io/ok0620-rq5tl-worker-westus23 scaled
+</code></pre></div>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:aro-content/ops/day2/scaling-nodes.md
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>oc -n openshift-machine-api get machine
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code>The output should look something like this:
+</code></pre></div>
+<p>=======
+View the machine set</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>a78436f (initial v2):aro-content/ops/2-2-worker-nodes.md</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>oc get machinesets -n openshift-machine-api
+</code></pre></div>
+<p>You will now see that the desired number of machines in the machine set we scaled is "2".</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:aro-content/ops/day2/scaling-nodes.md
+Now let's scale the cluster back down to a total of 3 worker nodes, but this time, from the web console.</p>
+<h1 id="1-return-to-your-tab-with-the-openshift-web-console-if-you-need-to-reauthenticate-follow-the-steps-in-the-access-your-cluster-section">1. Return to your tab with the OpenShift Web Console. If you need to reauthenticate, follow the steps in the <a href="../setup/3-access-cluster/">Access Your Cluster</a> section.<a class="headerlink" href="#1-return-to-your-tab-with-the-openshift-web-console-if-you-need-to-reauthenticate-follow-the-steps-in-the-access-your-cluster-section" title="Permanent link">#</a></h1>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$ oc get machinesets -n openshift-machine-api
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>ok0620-rq5tl-worker-westus21   1         1         1       1           73m
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>ok0620-rq5tl-worker-westus22   1         1         1       1           73m
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>ok0620-rq5tl-worker-westus23   2         2         1       1           73m
+</code></pre></div>
+<p>If we check the machines in the clusters</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>a78436f (initial v2):aro-content/ops/2-2-worker-nodes.md</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>oc get machine -n openshift-machine-api
+</code></pre></div>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:aro-content/ops/day2/scaling-nodes.md
+    <img align="center" alt="Web Console - Cluster Settings" src="/assets/images/web-console-machineset-sidebar.png" /></p>
+<ol>
+<li>
+<p>In the overview you will see the same information about the MachineSets that you saw on the command line. Now, locate the MachineSet which has "2 of 2" machines, and click on the ⋮ icon, then select <em>Edit machine count</em>.</p>
+<p><img align="center" alt="Web Console - MachineSets Menu" src="/assets/images/web-console-machinesets-three-dots.png" />
+<img align="center" alt="Web Console - MachineSets Count Menu" src="/assets/images/web-console-machinesets-edit-count-menu.png" /></p>
+</li>
+<li>
+<p>Next, reduce the count from "2" to "1" and click <em>Save</em> to save your changes.</p>
+<p><img align="center" alt="Web Console - MachineSets Edit Count" src="/assets/images/web-console-machinesets-edit-count.png" /></p>
+</li>
+</ol>
+<h1 id="congratulations-youve-successfully-scaled-your-cluster-up-and-back-down-to-three-nodes">Congratulations! You've successfully scaled your cluster up and back down to three nodes.<a class="headerlink" href="#congratulations-youve-successfully-scaled-your-cluster-up-and-back-down-to-three-nodes" title="Permanent link">#</a></h1>
+<p>You will see that one is in the "Provisioned" phase (and in the zone of the machineset we scaled) and will shortly be in "running" phase.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>$ oc get machine -n openshift-machine-api
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>NAME                                 PHASE         TYPE              REGION    ZONE   AGE
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      74m
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      74m
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      74m
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>ok0620-rq5tl-worker-westus21-n6lcs   Running       Standard_D4s_v3   westus2   1      74m
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>ok0620-rq5tl-worker-westus22-ggcmv   Running       Standard_D4s_v3   westus2   2      74m
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>ok0620-rq5tl-worker-westus23-5fhm5   Provisioned   Standard_D4s_v3   westus2   3      54s
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      74m
+</code></pre></div>
+<h3 id="scale-the-number-of-nodes-down-via-the-web-console">Scale the number of nodes down via the Web Console<a class="headerlink" href="#scale-the-number-of-nodes-down-via-the-web-console" title="Permanent link">#</a></h3>
+<p>Now let's scale the cluster back down to a total of 3 worker nodes, but this time, from the web console. (If you need the URL or credentials in order to access it please go back to the relevant portion of Lab 1)</p>
+<p>Access your OpenShift web console from the relevant URL. If you need to find the URL you can run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>az aro show <span class="se">\</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>   --name &lt;CLUSTER-NAME&gt; <span class="se">\</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>   --resource-group &lt;RESOURCEGROUP&gt; <span class="se">\</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>   --query <span class="s2">&quot;consoleProfile.url&quot;</span> -o tsv
+</code></pre></div>
+<p>Expand "Compute" in the left menu and then click on "MachineSets"</p>
+<p><img alt="machinesets-console" src="../assets/images/scale-down-console.png" /></p>
+<p>In the main pane you will see the same information about the machine sets from the command line.  Now click on the "three dots" at the end of the line for the machine set that you scaled up to "2". Select "Edit machine count" and decrease it to "1". Click save.</p>
+<p><img alt="machinesets-edit" src="../assets/images/edit-machinesets.png" /></p>
+<p>This will now decrease that machine set to only have one machine in it.</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>a78436f (initial v2):aro-content/ops/2-2-worker-nodes.md</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>

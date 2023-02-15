@@ -1,0 +1,911 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A workshop for Operations and Development teams on ARO.">
+      
+      
+        <meta name="author" content="Red Hat">
+      
+      
+        <link rel="canonical" href="https://ws.verynicecluster.cloud/app/2C-deploy-app/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.9">
+    
+    
+      
+        <title>Automate deploying the application with OpenShift Pipelines ( Part 3 ) - ARO Workshop</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.08040f6c.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,300i,400,400i,700,700i%7COverpass+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Overpass";--md-code-font:"Overpass Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="red">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#automate-deploying-the-application-with-openshift-pipelines-part-3" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ARO Workshop" class="md-header__button md-logo" aria-label="ARO Workshop" data-md-component="logo">
+      
+  <img src="../../favicon.ico" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ARO Workshop
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Automate deploying the application with OpenShift Pipelines ( Part 3 )
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/bizquigs/aro-workshop-content" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bizquigs/aro-hackathon-content
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ARO Workshop" class="md-nav__button md-logo" aria-label="ARO Workshop" data-md-component="logo">
+      
+  <img src="../../favicon.ico" alt="logo">
+
+    </a>
+    ARO Workshop
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/bizquigs/aro-workshop-content" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bizquigs/aro-hackathon-content
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Workshop Setup
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Workshop Setup" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Workshop Setup
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../general/1-workshop-setup/" class="md-nav__link">
+        Azure portal and CLI setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/1-3-get-credentials/" class="md-nav__link">
+        Retieve ARO Cluster Credentials
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Prepare the Cluster and Evironment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prepare the Cluster and Evironment" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Prepare the Cluster and Evironment
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/3-deploy-azure-service-operator/" class="md-nav__link">
+        Azure Service Operator
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/2-5-deploy-cosmos/" class="md-nav__link">
+        Deploy Cosmos Database
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Managing Worker Nodes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Managing Worker Nodes" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Managing Worker Nodes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/2-4-label-nodes/" class="md-nav__link">
+        Label Nodes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Deploy an Application
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deploy an Application" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Deploy an Application
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-1-deploy-frontend/" class="md-nav__link">
+        Deploy the frontend
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-2-deploy-backend/" class="md-nav__link">
+        Deploy the backend
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Make the application resilent
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Make the application resilent" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Make the application resilent
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/2-3-autoscaling.md" class="md-nav__link">
+        Setup cluster autoscaling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3-scale-app/" class="md-nav__link">
+        Make Applications Resilient
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          ARO Day X Operations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="ARO Day X Operations" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          ARO Day X Operations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/day2/upgrades/" class="md-nav__link">
+        Managing Upgrades
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/bizquigs/aro-workshop-content/edit/master/docs/app/2C-deploy-app.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="automate-deploying-the-application-with-openshift-pipelines-part-3">Automate deploying the application with OpenShift Pipelines ( Part 3 )<a class="headerlink" href="#automate-deploying-the-application-with-openshift-pipelines-part-3" title="Permanent link">#</a></h1>
+<p>We will be using OpenShift Pipelines which is based on the Open Source Tekton project to automatically deploy our application using a CI/CD pipeline.</p>
+<p>If you would like to read more about OpenShift Pipelines, click <a href="https://docs.openshift.com/container-platform/4.11/cicd/pipelines/understanding-openshift-pipelines.html">here</a></p>
+<p>The first thing you need to do is fork the code repositories so that you can make changes to the code base and then OpenShift pipelines will build and deploy the new code.</p>
+<p>Opening your browser, go to the following github repos 
+https://github.com/rh-mobb/common-java-dependencies
+https://github.com/rh-mobb/aro-hackaton-app</p>
+<p>For each of the repositories, click Fork and then choose your own Git Account.
+<img alt="Image" src="../images/fork-git.png" /></p>
+<p><strong>Clone git repos</strong></p>
+<p>Next, we will need to make a directory and clone your personal github repository that you just forked to.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mkdir <span class="nv">$USERID</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span> <span class="nv">$USERID</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git clone https://github.com/&lt;YOUR GITHUB USER ID&gt;/common-java-dependencies
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>git clone https://github.com/kmcolli/aro-hackaton-app
+</code></pre></div>
+<p><strong>Review OpenShift Pipeline Tasks</strong>
+The next thing we need to do is import common Tekton tasks that our pipeline will use.  These common tasks are designed to be reused across multiple pipelines.</p>
+<p>Let's start by taking a look at the reusable Tasks that we will be using.  From your cloud shell, change directorys to ~/aro-hackaton-app/pipeline and list the files.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span> ~/aro-hackaton-app/pipeline/tasks
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ls <span class="p">|</span> tr “” “<span class="se">\n</span>”
+</code></pre></div>
+<p>Expected output:<br>
+<img alt="Image" src="../images/pipeline-tasks.png" /></p>
+<ul>
+<li>
+<p><strong>1-git-clone.yaml</strong> <br>
+  Clones a given GitHub Repo.</p>
+</li>
+<li>
+<p><strong>2-mvn.yaml</strong> <br>
+  This Task can be used to run a Maven build</p>
+</li>
+<li>
+<p><strong>3-mvn-build-image.yaml</strong> <br>
+  Packages source with maven builds and into a container image, then pushes it to a container registry. Builds source into a container image using Project Atomic's Buildah build tool. It uses Buildah's support for building from Dockerfiles, using its buildah bud command.This command executes the directives in the Dockerfile to assemble a container image, then pushes that image to a container registry.</p>
+</li>
+<li>
+<p><strong>4-apply-manifest.yaml</strong> <br>
+  Applied manifest files to the cluster</p>
+</li>
+<li>
+<p><strong>5-update-deployment.yaml</strong> <br>
+  Updates a deployment with the new container image.</p>
+</li>
+</ul>
+<p>From the Cloud Shell, we need to apply all of these tasks to our cluster.  Run the following command:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>oc apply -f ~/aro-hackaton-app/pipeline/tasks
+</code></pre></div>
+<p>expected output:
+<img alt="Image" src="../images/apply-pipeline-tasks.png" /></p>
+<p><strong>Configure Azure Container Registry</strong>
+Next, we need to create a secret to push and pull images into Azure Container Registry.  Each attendee has their own Azure Container Registry service assigned to them, with the naming convention <USERID>acr.azurecr.io</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">ACRPWD</span><span class="o">=</span><span class="k">$(</span>az acr credential show -n <span class="si">${</span><span class="nv">USERID</span><span class="si">}</span>acr -g <span class="nv">$ARORG</span> --query <span class="s1">&#39;passwords[0].value&#39;</span> -o tsv<span class="k">)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>oc create secret docker-registry --docker-server<span class="o">=</span><span class="si">${</span><span class="nv">USERID</span><span class="si">}</span>acr.azurecr.io --docker-username<span class="o">=</span><span class="si">${</span><span class="nv">USERID</span><span class="si">}</span>acr --docker-password<span class="o">=</span><span class="nv">$ACRPWD</span> --docker-email<span class="o">=</span>unused acr-secret
+</code></pre></div>
+<p><strong>Configure the pipleine service account</strong>
+Create the pipeline service account and permissions that the pipeline tasks will run under:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>oc create -f ~/aro-hackaton-app/pipeline/1-pipeline-account.yaml
+</code></pre></div>
+<p>Expected output:
+<img alt="Image" src="../images/create-pipeline-account.png" /></p>
+<p>Link the acr-secret you just created to it can mount and pull images</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>oc secrets link pipeline acr-secret --for<span class="o">=</span>pull,mount
+</code></pre></div>
+<p>Make sure the secret is linked to the pipeline service account.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>oc describe sa pipeline
+</code></pre></div>
+<p>expected output: 
+<img alt="Image" src="../images/pipeline-sa-secret.png" /></p>
+<p>We also need to give the pipeline permission for certain security context constraints to that it can execute.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>oc adm policy add-scc-to-user anyuid -z pipeline
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>oc adm policy add-scc-to-user privileged -z pipeline
+</code></pre></div>
+<p><strong>Create a PVC that the pipeline will use to store the build images</strong>\</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>oc create -f ~/aro-hackaton-app/pipeline/2-pipeline-pvc.yaml
+</code></pre></div>
+<p><strong>Review the Pipeline Definition</strong>
+Next we need to create the pipeline definition.  Before we actually create the pipeline, lets take a look at the pipeline definition.</p>
+<p>Open a browser to the git repo to browse the pipeline.yaml file.<br>
+https://github.com/rh-mobb/aro-hackaton-app/blob/main/pipeline/3-pipeline.yaml</p>
+<p>Browse through the file and notice all the tasks that are being executed.  These are the tasks we imported in the previous step.  The pipeline definition simply says which order the tasks are run and what parameters should be passed between tasks.
+<img alt="Image" src="../images/pipeline-yaml.png" /></p>
+<p><strong>Update Application Settings</strong>
+Now that we have the source code forked, we need to copy the properties file we created earlier to our new code base.  Let's create a new directory, clone the repo and copy the file.</p>
+<p>Using the cloud shell, run the following commands.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nb">cd</span> ~/<span class="nv">$USERID</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>cp ../aro-hackaton-app/src/main/resources/application.properties aro-hackaton-app/src/main/resources/application.properties 
+</code></pre></div></p>
+<p><strong>Setup git and push changes to the properties file</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>git config --global user.email <span class="s2">&quot;&lt;your github email&gt;&quot;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>git config --global user.name “&lt;your github username&gt;”
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>git init
+</code></pre></div>
+<p><strong>Commit changes to git</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>cd aro-hackaton-app
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>git add *
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>git commit -am &quot;Update Propereties File&quot;
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>git push
+</code></pre></div></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>when prompted log in with your git user name ( email ) and git token.  If you need a git token, please refer to this <a href="https://catalyst.zoho.com/help/tutorials/githubbot/generate-access-token.html">document</a></p>
+</div>
+<p><strong>Create git secret</strong></p>
+<p>While you have your github userid and secret handy, let's also create a secret containing your github credentials that we will need later.  First set git envrionment variables and then run a script to create the secret.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nb">export</span> <span class="nv">GIT_USER</span><span class="o">=</span>&lt;your git email&gt;
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">export</span> <span class="nv">GIT_TOKEN</span><span class="o">=</span>&lt;your git token&gt;
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>~/aro-hackaton-app/pipeline/0-github-secret.sh
+</code></pre></div>
+<p><strong>Create the pipeline definition on your cluster</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>oc create -f ~/aro-hackaton-app/pipeline/3-pipeline.yaml
+</code></pre></div>
+<p><strong>Update the deployment to use ACR</strong>
+Finally we will create a pipeline run that will execute the pipeline, which will pull code from the your git repo that you forked, will build the image and deploy it to OpenShift.</p>
+<p>There are a couple settings in the pipeline run that we will need to update.</p>
+<p>Before we can actually run the pipeline that will update the deployment, we need to tell the deployment to use the ACR pull secret we created in the previous step.</p>
+<p>To do so, run the following command.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>oc patch deploy/microsweeper-appservice --patch-file ~/aro-hackaton-app/pipeline/5-deployment-patch.yaml
+</code></pre></div>
+<p>Edit the ~/$USERID/aro-hackaton-app/pipeline/4-pipeline-run.yaml file.  The three things to change is the:
+* <strong>dependency-git-url</strong> - to point to your personal git repository
+* <strong>application-git-url</strong> - to point to your personal git repository
+* <strong>image-name</strong> - change this to reflect to the ACR Registry created for you ... this should be $USERIDacr.azurecr.io/minesweeper</p>
+<p><img alt="Image" src="../images/pipeline-run.png" /></p>
+<p><strong>Create the pipeline run</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>oc create -f ~/<span class="nv">$USERID</span>/aro-hackaton-app/pipeline/4-pipeline-run.yaml
+</code></pre></div>
+<p>This will start a pipeline run and redeploy the minesweeper application, but this time will build the code from your github repository and the pipeline will deploy the application as well to OpenShift.</p>
+<p><strong>Validate the pipeline</strong>
+Let's take a look at the OpenShift console to see what was created and if the application was successfully deployed.</p>
+<p>From the OpenShift Conole - Administrator view, click on Pipelines and then Tasks.
+<img alt="Image" src="../images/pipeline-tasks-ocp.png" /></p>
+<p>Notice the 5 tasks that we imported and click into them to view the yaml defitions.</p>
+<p>Next, lets look at the Pipeline.   Click on Pipelines.  Notice that that last run was successful.  Click on maven-pipeline to view the pipeline details.
+<img alt="Image" src="../images/pipeline-ocp.png" /></p>
+<p>On the following screen, click on Pipeline Runs to view the status of each Pipeline Run.
+<img alt="Image" src="../images/pipeline-run-ocp.png" /></p>
+<p>Lastely, click on the PipeRun name and you can see all the details and steps of the Pipeline.  If your are curious, also click on logs and view the logs of the different tasks that were ran.
+<img alt="Image" src="../images/pipeline-run-details-ocp.png" /></p>
+<h1 id="event-triggering">Event Triggering<a class="headerlink" href="#event-triggering" title="Permanent link">#</a></h1>
+<p>At this point, we can successfully build and deploy new code by manually runnning a pipeline run.  But how can we configure the pipeline to run automatically when we commit code with git?  We can do so with an Event Listener and a Trigger!</p>
+<p>Let's start by looking at the resources we will be creating to create our event listener and trigger.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ls ~/<span class="nv">$USER</span>/aro-hackaton-app/pipeline/tasks/event-listener <span class="p">|</span> tr “” “<span class="se">\n</span>”
+</code></pre></div>
+<p>expected output:
+<img alt="Image" src="../images/event-listener-files.png" /></p>
+<p>Take a look at the files listed:</p>
+<ul>
+<li>
+<p><strong>1-web-trigger-binding.yaml</strong>
+  This TriggerBinding allows you to extract fields, such as the git repository name, git commit number, and the git repository URL in this case.
+  To learn more about TriggerBindings, click <a href="https://tekton.dev/docs/triggers/triggerbindings/">here</a></p>
+</li>
+<li>
+<p><strong>2-web-trigger-template.yaml</strong>
+  The TriggerTemplate specifies how the pipeline should be run.  Browsing the file above, you will see there is a definition of the PipelineRun that looks exactly like the PipelineRun you create in the previous step.  This is by design! ... it should be the same.</p>
+</li>
+</ul>
+<p>You will need to edit this file so it points to your git repository and acr image repository.  Change the following entries to point to your GIT Repository.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>- name: dependency-git-url
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  value: https://github.com/&lt;YOUR-GITHUB-ID&gt;/common-java-dependencies
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>- name: application-git-url
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>  value: https://github.com/&lt;YOUR-GITHUB-ID&gt;/aro-hackaton-app
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+</div>
+<p>As a reminder, each attendee has their own Azure Container Registry service assigned to them, with the naming convention <USERID>acr.azurecr.io </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>- name: image-name
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>  value: &lt;CHANGE-ME&gt;.azurecr.io/minesweeper
+</code></pre></div>
+<p>To learn more about TriggerTemplates, click <a href="https://tekton.dev/docs/triggers/triggertemplates/">here</a></p>
+<ul>
+<li><strong>3-web-trigger.yaml</strong>
+  The next file we have is the Trigger.  The Trigger specifies what should happen when the EventListener detects an Event.  Looking at this file, you will see that we are looking for 'Push' events that will create an instance of the TriggerTemplate that we just created.  This in turn will start the PipelineRun.</li>
+</ul>
+<p>To learn more about Triggers, click <a href="https://tekton.dev/docs/triggers/triggers/">here</a></p>
+<ul>
+<li><strong>4-event-listenter.yaml</strong>
+  The last file we have is the Event Listener.  An EventListener is a Kubernetes object that listens for events at a specified port on your OpenShift cluster. It exposes an OpenShift Route that receives incoming event and specifies one or more Triggers. </li>
+</ul>
+<p>To learn more about EventListeners, click <a href="https://tekton.dev/docs/triggers/eventlisteners/">here</a></p>
+<p>Now that you have reviewed all the files, let's apply them to our cluster.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>  oc create -f ~/<span class="nv">$USER</span>/aro-hackaton-app/pipeline/tasks/event-listener
+</code></pre></div>
+<p>Before we test out our EventListener and Trigger, lets review what was created in OpenShift.</p>
+<p>From the OpenShift console, under Pipelines, click on Triggers.</p>
+<p>Browse the EventListener, TriggerTemplate and TriggerBindings that you just created.
+<img alt="Image" src="../images/ocp-triggers.png" /></p>
+<p>The next thing we need to do, is connect our EventListener with Git.  When an action, such as a git push, happens, git will need to call our EventListner to start the build and deploy process.</p>
+<p>The first thing we need to do is exposing our EventListner service.</p>
+<p>From the Cloud Shell, let's start by looking at the event listener service.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>oc get svc
+</code></pre></div>
+<p>expected output:
+<img alt="Image" src="../images/ocp-svc.png" /></p>
+<p>Expose the service so that Git is able to connect to the event listener.<br></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since this is public cluster, we can simply use the included OpenShift Ingress Controller as it is exposed to the Internet.  For a private cluster, you can follow the same process as we did above in exposing the minesweeper application with Front Door!</p>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>oc expose svc el-minesweeper-el
+</code></pre></div>
+<p>To get the url of the Event Listener Route that we just created, run the following command:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>oc get route el-minesweeper-el
+</code></pre></div>
+<p>expected output:
+<img alt="Image" src="../images/el-route.png" /></p>
+<p>The last step we need to do, is configure git to call this event listner URL when events occur.</p>
+<p>From your browser, go to your personal GitHub aro-hackaton-app repository, and click on Settings.
+<img alt="Image" src="../images/git-settings.png" /></p>
+<p>On the next screen, click on webhooks.
+<img alt="Image" src="../images/git-settings-webhook.png" /></p>
+<p>Click on add webhook
+<img alt="Image" src="../images/git-add-webhook.png" /></p>
+<p>On the next screen, enter the following settings:
+- <strong>PayloadURL</strong> - enter http://<event listener hostname you got above>
+- <strong>ContentType</strong> - select application/json
+- <strong>Secret</strong> - this your github token </p>
+<p>Where does this secret value come from?
+Refer to the ~/$USERID/aro-hackaton-app/pipeline/tasks/event-listener/web-trigger.yaml file.</p>
+<p>You will see the following snippet that contains the secret to access git.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>  interceptors:
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    - ref:
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>        name: <span class="s2">&quot;github&quot;</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>      params:
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>        - name: <span class="s2">&quot;secretRef&quot;</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>          value:
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>            secretName: gitsecret
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>            secretKey: secretToken
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>        - name: <span class="s2">&quot;eventTypes&quot;</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>          value: <span class="o">[</span><span class="s2">&quot;push&quot;</span><span class="o">]</span>
+</code></pre></div>
+<p>The secret you enter here for the git webhook, needs to match the value for the <em>secretToken</em> key of the a secret named gitsecret.  If you remember in the previous step, we create this secret and used your git token as this value.</p>
+<p>Keep the remaining defaults, and click Add webhook</p>
+<p><img alt="Image" src="../images/add-webhook.png" /></p>
+<h2 id="test-it-out">Test it out!!<a class="headerlink" href="#test-it-out" title="Permanent link">#</a></h2>
+<p>Now that we have our trigger, eventlistener and git webhook setup, lets test it out.</p>
+<p>Make sure you are in the directory for your personal git repo where the application is, and edit the <em>/src/main/resources/META-INF/resources/index.html</em> file.</p>
+<p>Search for Leaderboard and change it to \&lt;YOUR NAME> Leaderboard.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nb">cd</span> ~/<span class="nv">$USERID</span>/aro-hackaton-app
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>vi src/main/resources/META-INF/resources/index.html
+</code></pre></div>
+<p><img alt="Image" src="../images/html-edit.png" /></p>
+<p>Now commit and push the change</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>git commit -am <span class="s1">&#39;updated leaderboard title&#39;</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>git push
+</code></pre></div>
+<p>Pushing the change to the your git repository will kick of the event listener which will start the pipeline.</p>
+<p>As a bonus, if you want to look at the logs of the event listener, you can use the tekton (tkn) cli.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>tkn eventlistener logs minesweeper-el
+</code></pre></div>
+<img alt="Image" src="../images/tkn.png" /></p>
+<p>Quickly switch over to your OpenShift Console, and watch the pipeline run.</p>
+<p><img alt="Image" src="../images/watch-pipeline.png" /></p>
+<p>Once the pipeline finishes, check out the change.</p>
+<p>From the OpenShift Console, click on Networking and the Routes.
+<img alt="Image" src="../images/route-2.png" /></p>
+<p>and drum roll ...  you should see the updated application with a new title for the leaderboard.
+<img alt="Image" src="../images/updated-minesweeper.png" /></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1049 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A workshop for Operations and Development teams on ARO.">
+      
+      
+        <meta name="author" content="Red Hat">
+      
+      
+        <link rel="canonical" href="https://ws.verynicecluster.cloud/ops/5-arc-integration/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.9">
+    
+    
+      
+        <title>Integrating Azure ARC with ARO - ARO Workshop</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.08040f6c.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,300i,400,400i,700,700i%7COverpass+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Overpass";--md-code-font:"Overpass Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="red">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#integrating-azure-arc-with-aro" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ARO Workshop" class="md-header__button md-logo" aria-label="ARO Workshop" data-md-component="logo">
+      
+  <img src="../../favicon.ico" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ARO Workshop
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integrating Azure ARC with ARO
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/bizquigs/aro-workshop-content" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bizquigs/aro-hackathon-content
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ARO Workshop" class="md-nav__button md-logo" aria-label="ARO Workshop" data-md-component="logo">
+      
+  <img src="../../favicon.ico" alt="logo">
+
+    </a>
+    ARO Workshop
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/bizquigs/aro-workshop-content" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bizquigs/aro-hackathon-content
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Workshop Setup
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Workshop Setup" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Workshop Setup
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../general/1-workshop-setup/" class="md-nav__link">
+        Azure portal and CLI setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1-3-get-credentials/" class="md-nav__link">
+        Retieve ARO Cluster Credentials
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Prepare the Cluster and Evironment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prepare the Cluster and Evironment" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Prepare the Cluster and Evironment
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3-deploy-azure-service-operator/" class="md-nav__link">
+        Azure Service Operator
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-5-deploy-cosmos/" class="md-nav__link">
+        Deploy Cosmos Database
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Managing Worker Nodes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Managing Worker Nodes" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Managing Worker Nodes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-4-label-nodes/" class="md-nav__link">
+        Label Nodes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Deploy an Application
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deploy an Application" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Deploy an Application
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../app/2-1-deploy-frontend/" class="md-nav__link">
+        Deploy the frontend
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../app/2-2-deploy-backend/" class="md-nav__link">
+        Deploy the backend
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Make the application resilent
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Make the application resilent" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Make the application resilent
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-3-autoscaling.md" class="md-nav__link">
+        Setup cluster autoscaling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../app/3-scale-app/" class="md-nav__link">
+        Make Applications Resilient
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          ARO Day X Operations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="ARO Day X Operations" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          ARO Day X Operations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../day2/upgrades/" class="md-nav__link">
+        Managing Upgrades
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enable-extensions-and-plugins" class="md-nav__link">
+    Enable Extensions and Plugins
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connect-an-existing-aro-cluster" class="md-nav__link">
+    Connect an existing ARO cluster
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enable-observability" class="md-nav__link">
+    Enable observability
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#access-secrets-from-azure-key-vault" class="md-nav__link">
+    Access Secrets from Azure Key Vault
+  </a>
+  
+    <nav class="md-nav" aria-label="Access Secrets from Azure Key Vault">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-extension" class="md-nav__link">
+    Install extension
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-or-select-an-azure-key-vault" class="md-nav__link">
+    Create or Select an Azure Key Vault
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provide-identity-to-access-azure-key-vault" class="md-nav__link">
+    Provide identity to access Azure Key Vault
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validate-the-secrets" class="md-nav__link">
+    Validate the secrets
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enable-log-aggregation" class="md-nav__link">
+    Enable log aggregation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitor-aro-cluster-against-goverance-policies" class="md-nav__link">
+    Monitor ARO cluster against Goverance Policies
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/bizquigs/aro-workshop-content/edit/master/docs/ops/5-arc-integration.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="integrating-azure-arc-with-aro">Integrating Azure ARC with ARO<a class="headerlink" href="#integrating-azure-arc-with-aro" title="Permanent link">#</a></h1>
+<p>In this section of the workshop, we will integrate ARO cluster with Azure Arc-enabled Kubernetes. When you connect a Kubernetes/OpenShift cluster with Azure Arc, it will:</p>
+<ul>
+<li>Be represented in Azure Resource Manager with a unique ID</li>
+<li>Be place in an Azure subscription and resource group </li>
+<li>Receive tags just like any otherAzure resource</li>
+</ul>
+<p>Azure Arc-enabled Kubernetes supports the following scenarios for connected clusters:</p>
+<ul>
+<li>Connect Kubernetes running outside of Azure for inventory, grouping, and tagging.</li>
+<li>Deploy applications and apply configuration using GitOps-based configuration management.</li>
+<li>View and monitor your clusters using Azure Monitor for containers.</li>
+<li>Enforce threat protection using Microsoft Defender for Kubernetes.</li>
+<li>Apply policy definitions using Azure Policy for Kubernetes.</li>
+<li>Use Azure Active Directory for authentication and authorization checks on your cluster</li>
+</ul>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">#</a></h2>
+<ul>
+<li>a public ARO cluster</li>
+<li>azure cli </li>
+<li>oc cli</li>
+<li>An identity (user or service principal) which can be used to log in to Azure CLI and connect your cluster to Azure Arc.</li>
+</ul>
+<h2 id="enable-extensions-and-plugins">Enable Extensions and Plugins<a class="headerlink" href="#enable-extensions-and-plugins" title="Permanent link">#</a></h2>
+<p>Install the connectedk8s Azure Cli extension of version &gt;= 1.2.0</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>az extension add --name <span class="s2">&quot;connectedk8s&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>az extension add --name <span class="s2">&quot;k8s-configuration&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>az extension add --name <span class="s2">&quot;k8s-extension&quot;</span>
+</code></pre></div>
+Register providers for Azure Arc-enabled Kubernetes. Registration may take up to 5 minutes.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>az provider register --namespace Microsoft.Kubernetes
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>az provider register --namespace Microsoft.KubernetesConfiguration
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>az provider register --namespace Microsoft.ExtendedLocation
+</code></pre></div>
+<h2 id="connect-an-existing-aro-cluster">Connect an existing ARO cluster<a class="headerlink" href="#connect-an-existing-aro-cluster" title="Permanent link">#</a></h2>
+<p>Make sure you are logged into your ARO cluster
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">kubeadmin_password</span><span class="o">=</span><span class="k">$(</span>az aro list-credentials --name <span class="s">&lt;&lt;cluster name&gt;&gt; --resource-group &lt;&lt;resource group name&gt;&gt; --query kubeadminPassword --output tsv)   </span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">apiServer=$(az aro show -g &lt;&lt;resource group name&gt;&gt; -n &lt;&lt;cluster</span> name&gt;&gt; --query apiserverProfile.url -o tsv<span class="k">)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>oc login <span class="nv">$apiServer</span> -u kubeadmin -p <span class="nv">$kubeadmin_password</span>
+</code></pre></div></p>
+<p>Run the following command:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>az connectedk8s connect --resource-group <span class="nv">$resourceGroupName</span> --name <span class="nv">$clusterName</span> --distribution openshift --infrastructure auto
+</code></pre></div></p>
+<p>After running the commnad. grant the following permissions and restart kube-aad-proxy pod
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>oc project azure-arc
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>oc adm policy add-scc-to-user privileged system:serviceaccount:azure-arc:azure-arc-kube-aad-proxy-sa
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>oc get pod | grep
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>kube-aad-proxy-6d9b66b9cd-g27xr              0/2     ContainerCreating   0          26s
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>oc delete pod kube-aad-proxy-6d9b66b9cd-g27xr  
+</code></pre></div></p>
+<p>Wait for a few mins and you will see all the pods in <code>azure-arc</code> namespace running 
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>oc get pods
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>NAME                                         READY   STATUS    RESTARTS   AGE
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>cluster-metadata-operator-7dfd94949c-wtvjw   2/2     Running   0          4m47s
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>clusterconnect-agent-7d78db9859-wzthd        3/3     Running   0          4m47s
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>clusteridentityoperator-7b96bcb448-hzthh     2/2     Running   0          4m47s
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>config-agent-dbf66bbc7-r27qs                 2/2     Running   0          4m47s
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>controller-manager-67547546f-cmlb9           2/2     Running   0          4m47s
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>extension-manager-548c9d7d6b-jrrdn           2/2     Running   0          4m47s
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>flux-logs-agent-bb994c74f-m5gdc              1/1     Running   0          4m47s
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>kube-aad-proxy-6d9b66b9cd-g27xr              2/2     Running   0          3m16s
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>metrics-agent-7d794679c6-k4b7g               2/2     Running   0          4m47s
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>resource-sync-agent-bb79c44b8-5brjr          2/2     Running   0          4m47s
+</code></pre></div></p>
+<p>This commands take about 5 mins to complete. Upon the completion of the command you should see the following output and your cluster under Kubernetes - Azure Arc service in Azure Portal</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>{
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  &quot;agentPublicKeyCertificate&quot;: &quot;MIICCgKCAgEArNXWSoWVg7q/W5t7vwY24Y8c+dRxy3we/EIRryXx1Orl8GEX94BsHJqvP0iW6ANZ0qoWE675+NR6V3nDMSkis5/aSYMQ8/yWMcUzieKwFfFmTSfCpkzwxy6PSbdRjMwK5H3DDOOXyRQcJV557F5FjHVYfC/0DkPYdhfepcVade+HgOwOOJH28hSNw58pWo/GNNmcwtzFPVdx/TM574CbNVz4OdrtsMy7FKKC63lYW+W3wkzFOqB+qPaITwqwzkruIoSi5HIatONoCPijdTLm3+RoK/CbTYqzHEEId8gFFJd+J4qfSeCYu6jeDNOpwt8DKDLFLvv04oHyxm+Nr34xPBm3+sjggvkLQ5UWpGZ9h7jWTEP2pWEcXF0KqAqAEFPBOOqDKEaYfLtJSJ/yExS1otydDCJEZ1sRPvsjdH5f0DKVXPHgiDa4SoLXomqkarF3g9i6CEK/XE9JTVa8WBJT6wXdXBa0xh8EnzZ9uyVuY1k/2L7d4BR5+sIjqtcDfRSVtxN+LNxgqpo20ltXM1hWkd8WacK7VY+t2lxbYf01zhXWOpaBGgeAMqxqqcHeQor2vzA9PENYYr5zo8eP1LcySmC4LIFiDfN1NxAiZ5SCnrorNFbmrgEDFnWvZzdu2w4r55fsV9qnozUjn6iRqByhyMoeLn5EZLLK5zsW8sA/CeUCAwEAAQ==&quot;,
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  &quot;agentVersion&quot;: null,
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  &quot;connectivityStatus&quot;: &quot;Connecting&quot;,
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  &quot;distribution&quot;: &quot;OpenShift&quot;,
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  &quot;id&quot;: &quot;/subscriptions/e7f88b1a-04fc-4d00-ace9-eec077a5d6af/resourceGroups/sazed-aro-cluster/providers/Microsoft.Kubernetes/connectedClusters/sazed-aro-cluster&quot;,
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  &quot;identity&quot;: {
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    &quot;principalId&quot;: &quot;xxxx-xxxx-xxxx-xxxx&quot;,
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    &quot;tenantId&quot;: &quot;xxxx-xxxx-xxxx-xxxx&quot;,
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    &quot;type&quot;: &quot;SystemAssigned&quot;
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>  },
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  &quot;infrastructure&quot;: &quot;azure&quot;,
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>  &quot;kubernetesVersion&quot;: null,
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>  &quot;lastConnectivityTime&quot;: null,
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>  &quot;location&quot;: &quot;eastus&quot;,
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>  &quot;managedIdentityCertificateExpirationTime&quot;: null,
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>  &quot;name&quot;: &quot;sazed-aro-cluster&quot;,
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>  &quot;offering&quot;: null,
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>  &quot;provisioningState&quot;: &quot;Succeeded&quot;,
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>  &quot;resourceGroup&quot;: &quot;sazed-aro-cluster&quot;,
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>  &quot;systemData&quot;: {
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>    &quot;createdAt&quot;: &quot;2022-09-15T19:23:40.540376+00:00&quot;,
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>    &quot;createdBy&quot;: &quot;sazed@redhat.com&quot;,
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>    &quot;createdByType&quot;: &quot;User&quot;,
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>    &quot;lastModifiedAt&quot;: &quot;2022-09-15T19:23:40.540376+00:00&quot;,
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>    &quot;lastModifiedBy&quot;: &quot;sazed@redhat.com&quot;,
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>    &quot;lastModifiedByType&quot;: &quot;User&quot;
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>  },
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>  &quot;tags&quot;: {},
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>  &quot;totalCoreCount&quot;: null,
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>  &quot;totalNodeCount&quot;: null,
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>  &quot;type&quot;: &quot;microsoft.kubernetes/connectedclusters&quot;
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>}
+</code></pre></div>
+<p>To check the status of clusters connected to Azure ARC, run the following command
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a> az connectedk8s list --resource-group &lt;&lt;resource group&gt;&gt; --output table
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Name                 Location    ResourceGroup
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>-------------------  ----------  -------------------
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>&lt;&lt; cluster name &gt;&gt;&gt;  eastus      &lt;&lt; resource group &gt;&gt;
+</code></pre></div></p>
+<h2 id="enable-observability">Enable observability<a class="headerlink" href="#enable-observability" title="Permanent link">#</a></h2>
+<p>In order to see ARO resource inside Azure Arc, you need to create a service account and provide it to Azure Arc. </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>oc project azure-arc
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>oc create serviceaccount azure-arc-observability
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>oc create clusterrolebinding azure-arc-observability-rb --clusterrole cluster-admin --serviceaccount azure-arc:azure-arc-observability
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>apiVersion: v1
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>kind: Secret
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>metadata:
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  name: azure-arc-observability-secret
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  namespace: azure-arc
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>  annotations:
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    kubernetes.io/service-account.name: azure-arc-observability
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>type: kubernetes.io/service-account-token
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>oc apply -f aro-content/assets/azure-arc-secret.yaml
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">TOKEN</span><span class="o">=</span><span class="k">$(</span>oc get secret azure-arc-observability-secret -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{$.data.token}&#39;</span> <span class="p">|</span> base64 -d <span class="p">|</span> sed <span class="s1">&#39;s/$/\\n/g&#39;</span><span class="k">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">echo</span> <span class="nv">$TOKEN</span>
+</code></pre></div>
+<p>Copy the token, goto Azure portal and select your cluster under "Kubernetes - Azure Arc"
+Select Namespaces from the left side menu and paste the token in "Service account bearer token" input field. </p>
+<p><img alt="Image" src="../Images/aro-arc-integration-image1.png" /></p>
+<p>Now you can see all of your ARO rearouses inside ARC UI. you can see the following resources inside Azure ARC portal:
+- Namespaces
+- Workloads
+- Services and Ingress
+- Storage
+- Configurations</p>
+<h2 id="access-secrets-from-azure-key-vault">Access Secrets from Azure Key Vault<a class="headerlink" href="#access-secrets-from-azure-key-vault" title="Permanent link">#</a></h2>
+<p>The Azure Key Vault Provider for Secrets Store CSI Driver allows for the integration of Azure Key Vault as a secrets store with a Kubernetes cluster via a CSI volume. For Azure Arc-enabled Kubernetes clusters, you can install the Azure Key Vault Secrets Provider extension to fetch secrets.</p>
+<h3 id="install-extension">Install extension<a class="headerlink" href="#install-extension" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>az k8s-extension create --cluster-name <span class="s">&lt;&lt;cluster name&gt;&gt; --resource-group &lt;&lt;resource group&gt;&gt; --cluster</span>-type connectedClusters --extension-type Microsoft.AzureKeyVaultSecretsProvider --name akvsecretsprovider
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="o">{</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>  <span class="s2">&quot;aksAssignedIdentity&quot;</span>: null,
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>  <span class="s2">&quot;autoUpgradeMinorVersion&quot;</span>: true,
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>  <span class="s2">&quot;configurationProtectedSettings&quot;</span>: <span class="o">{}</span>,
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>  <span class="s2">&quot;configurationSettings&quot;</span>: <span class="o">{}</span>,
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>  <span class="s2">&quot;customLocationSettings&quot;</span>: null,
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>  <span class="s2">&quot;errorInfo&quot;</span>: null,
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>  <span class="s2">&quot;extensionType&quot;</span>: <span class="s2">&quot;microsoft.azurekeyvaultsecretsprovider&quot;</span>,
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>  <span class="s2">&quot;id&quot;</span>: <span class="s2">&quot;/subscriptions/e7f88b1a-04fc-4d00-ace9-eec077a5d6af/resourceGroups/sazed-aro-cluster/providers/Microsoft.Kubernetes/connectedClusters/sazed-aro-cluster-1/providers/Microsoft.KubernetesConfiguration/extensions/akvsecretsprovider&quot;</span>,
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>  <span class="s2">&quot;identity&quot;</span>: <span class="o">{</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    <span class="s2">&quot;principalId&quot;</span>: <span class="s2">&quot;xxxx-xxxx-xxxx-xxxx&quot;</span>,
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    <span class="s2">&quot;tenantId&quot;</span>: null,
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>    <span class="s2">&quot;type&quot;</span>: <span class="s2">&quot;SystemAssigned&quot;</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>  <span class="o">}</span>,
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>  <span class="s2">&quot;installedVersion&quot;</span>: null,
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>  <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;akvsecretsprovider&quot;</span>,
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>  <span class="s2">&quot;packageUri&quot;</span>: null,
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>  <span class="s2">&quot;provisioningState&quot;</span>: <span class="s2">&quot;Succeeded&quot;</span>,
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>  <span class="s2">&quot;releaseTrain&quot;</span>: <span class="s2">&quot;Stable&quot;</span>,
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>  <span class="s2">&quot;resourceGroup&quot;</span>: <span class="s2">&quot;sazed-aro-cluster&quot;</span>,
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>  <span class="s2">&quot;scope&quot;</span>: <span class="o">{</span>
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>    <span class="s2">&quot;cluster&quot;</span>: <span class="o">{</span>
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>      <span class="s2">&quot;releaseNamespace&quot;</span>: <span class="s2">&quot;kube-system&quot;</span>
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    <span class="o">}</span>,
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    <span class="s2">&quot;namespace&quot;</span>: null
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>  <span class="o">}</span>,
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>  <span class="s2">&quot;statuses&quot;</span>: <span class="o">[]</span>,
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>  <span class="s2">&quot;systemData&quot;</span>: <span class="o">{</span>
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>    <span class="s2">&quot;createdAt&quot;</span>: <span class="s2">&quot;2022-09-15T20:45:47.152390+00:00&quot;</span>,
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>    <span class="s2">&quot;createdBy&quot;</span>: null,
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>    <span class="s2">&quot;createdByType&quot;</span>: null,
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>    <span class="s2">&quot;lastModifiedAt&quot;</span>: <span class="s2">&quot;2022-09-15T20:45:47.152390+00:00&quot;</span>,
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>    <span class="s2">&quot;lastModifiedBy&quot;</span>: null,
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>    <span class="s2">&quot;lastModifiedByType&quot;</span>: null
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>  <span class="o">}</span>,
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>  <span class="s2">&quot;type&quot;</span>: <span class="s2">&quot;Microsoft.KubernetesConfiguration/extensions&quot;</span>,
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>  <span class="s2">&quot;version&quot;</span>: <span class="s2">&quot;1.3.0&quot;</span>
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a><span class="o">}</span>
+</code></pre></div>
+<p>Validate the extension installation</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>az k8s-extension show --cluster-type connectedClusters --cluster-name <span class="s">&lt;&lt;cluster name&gt;&gt; --resource-group &lt;&lt;resource group&gt;&gt; --name akvsecretsprovider</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="s">{</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="s">  &quot;aksAssignedIdentity&quot;: null,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="s">  &quot;autoUpgradeMinorVersion&quot;: true,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="s">  &quot;configurationProtectedSettings&quot;: {},</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="s">  &quot;configurationSettings&quot;: {},</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="s">  &quot;customLocationSettings&quot;: null,</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="s">  &quot;errorInfo&quot;: null,</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="s">  &quot;extensionType&quot;: &quot;microsoft.azurekeyvaultsecretsprovider&quot;,</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="s">  &quot;id&quot;: &quot;/subscriptions/e7f88b1a-04fc-4d00-ace9-eec077a5d6af/resourceGroups/sazed-aro-cluster</span>-1/providers/Microsoft.Kubernetes/connectedClusters/sazed-aro-cluster-1/providers/Microsoft.KubernetesConfiguration/extensions/akvsecretsprovider<span class="s2">&quot;,</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="s2">  &quot;</span>identity<span class="s2">&quot;: {</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="s2">    &quot;</span>principalId<span class="s2">&quot;: &quot;</span>xxxx-xxxx-xxxx-xxxx<span class="s2">&quot;,</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="s2">    &quot;</span>tenantId<span class="s2">&quot;: null,</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="s2">    &quot;</span>type<span class="s2">&quot;: &quot;</span>SystemAssigned<span class="s2">&quot;</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="s2">  },</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="s2">  &quot;</span>installedVersion<span class="s2">&quot;: null,</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="s2">  &quot;</span>name<span class="s2">&quot;: &quot;</span>akvsecretsprovider<span class="s2">&quot;,</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="s2">  &quot;</span>packageUri<span class="s2">&quot;: null,</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="s2">  &quot;</span>provisioningState<span class="s2">&quot;: &quot;</span>Succeeded<span class="s2">&quot;,</span>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="s2">  &quot;</span>releaseTrain<span class="s2">&quot;: &quot;</span>Stable<span class="s2">&quot;,</span>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="s2">  &quot;</span>resourceGroup<span class="s2">&quot;: &quot;</span>sazed-aro-cluster<span class="s2">&quot;,</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="s2">  &quot;</span>scope<span class="s2">&quot;: {</span>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="s2">    &quot;</span>cluster<span class="s2">&quot;: {</span>
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a><span class="s2">      &quot;</span>releaseNamespace<span class="s2">&quot;: &quot;</span>kube-system<span class="s2">&quot;</span>
+<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a><span class="s2">    },</span>
+<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a><span class="s2">    &quot;</span>namespace<span class="s2">&quot;: null</span>
+<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a><span class="s2">  },</span>
+<a id="__codelineno-13-29" name="__codelineno-13-29" href="#__codelineno-13-29"></a><span class="s2">  &quot;</span>statuses<span class="s2">&quot;: [],</span>
+<a id="__codelineno-13-30" name="__codelineno-13-30" href="#__codelineno-13-30"></a><span class="s2">  &quot;</span>systemData<span class="s2">&quot;: {</span>
+<a id="__codelineno-13-31" name="__codelineno-13-31" href="#__codelineno-13-31"></a><span class="s2">    &quot;</span>createdAt<span class="s2">&quot;: &quot;</span><span class="m">2022</span>-09-15T20:45:47.152390+00:00<span class="s2">&quot;,</span>
+<a id="__codelineno-13-32" name="__codelineno-13-32" href="#__codelineno-13-32"></a><span class="s2">    &quot;</span>createdBy<span class="s2">&quot;: null,</span>
+<a id="__codelineno-13-33" name="__codelineno-13-33" href="#__codelineno-13-33"></a><span class="s2">    &quot;</span>createdByType<span class="s2">&quot;: null,</span>
+<a id="__codelineno-13-34" name="__codelineno-13-34" href="#__codelineno-13-34"></a><span class="s2">    &quot;</span>lastModifiedAt<span class="s2">&quot;: &quot;</span><span class="m">2022</span>-09-15T20:45:47.152390+00:00<span class="s2">&quot;,</span>
+<a id="__codelineno-13-35" name="__codelineno-13-35" href="#__codelineno-13-35"></a><span class="s2">    &quot;</span>lastModifiedBy<span class="s2">&quot;: null,</span>
+<a id="__codelineno-13-36" name="__codelineno-13-36" href="#__codelineno-13-36"></a><span class="s2">    &quot;</span>lastModifiedByType<span class="s2">&quot;: null</span>
+<a id="__codelineno-13-37" name="__codelineno-13-37" href="#__codelineno-13-37"></a><span class="s2">  },</span>
+<a id="__codelineno-13-38" name="__codelineno-13-38" href="#__codelineno-13-38"></a><span class="s2">  &quot;</span>type<span class="s2">&quot;: &quot;</span>Microsoft.KubernetesConfiguration/extensions<span class="s2">&quot;,</span>
+<a id="__codelineno-13-39" name="__codelineno-13-39" href="#__codelineno-13-39"></a><span class="s2">  &quot;</span>version<span class="s2">&quot;: &quot;</span><span class="m">1</span>.3.0<span class="s2">&quot;</span>
+<a id="__codelineno-13-40" name="__codelineno-13-40" href="#__codelineno-13-40"></a><span class="s2">}</span>
+</code></pre></div>
+<h3 id="create-or-select-an-azure-key-vault">Create or Select an Azure Key Vault<a class="headerlink" href="#create-or-select-an-azure-key-vault" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>az keyvault create -n <span class="s">&lt;&lt;cluster name&gt;&gt; -g &lt;&lt;resource group&gt;&gt; -l eastus</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="s">az keyvault secret set --vault-name &lt;&lt;cluster</span> name&gt;&gt; -n DemoSecret --value MyExampleSecret
+</code></pre></div>
+<h3 id="provide-identity-to-access-azure-key-vault">Provide identity to access Azure Key Vault<a class="headerlink" href="#provide-identity-to-access-azure-key-vault" title="Permanent link">#</a></h3>
+<p>Currently, the Secrets Store CSI Driver on Arc-enabled clusters can be accessed through a service principal. Follow the steps below to provide an identity that can access your Key Vault.</p>
+<p>Use the provided Service Principal credentials provided with the lab and create a secret in ARO cluster</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>oc create secret generic secrets-store-creds --from-literal <span class="nv">clientid</span><span class="o">=</span><span class="s2">&quot;&lt;client-id&gt;&quot;</span> --from-literal <span class="nv">clientsecret</span><span class="o">=</span><span class="s2">&quot;&lt;client-secret&gt;&quot;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>oc label secret secrets-store-creds secrets-store.csi.k8s.io/used<span class="o">=</span><span class="nb">true</span>
+</code></pre></div>
+<p>Create a SecretProviderClass with the following YAML, filling in your values for key vault name, tenant ID, and objects to retrieve from your AKV instance</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>apiVersion: secrets-store.csi.x-k8s.io/v1
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>kind: SecretProviderClass
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>metadata:
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  name: akvprovider-demo
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>spec:
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>  provider: azure
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>  parameters:
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    usePodIdentity: <span class="s2">&quot;false&quot;</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    keyvaultName: &lt;key-vault-name&gt;
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    objects:  <span class="p">|</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>      array:
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>        - <span class="p">|</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>          objectName: DemoSecret
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>          objectType: secret            
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>          objectVersion: <span class="s2">&quot;&quot;</span>              
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>    tenantId: &lt;tenant-Id&gt;                
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>oc apply -f aro-content/assets/azure-arc-secretproviderclass.yaml
+</code></pre></div>
+<p>Create a pod with the following YAML, filling in the name of your identity</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>kind: Pod
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>apiVersion: v1
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>metadata:
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>  name: secret-store-pod
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>spec:
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>  containers:
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>    - name: busybox
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>      image: k8s.gcr.io/e2e-test-images/busybox:1.29
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>      command:
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>        - <span class="s2">&quot;/bin/sleep&quot;</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>        - <span class="s2">&quot;10000&quot;</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>      volumeMounts:
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>      - name: secrets-store-inline
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>        mountPath: <span class="s2">&quot;/mnt/secrets-store&quot;</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>        readOnly: <span class="nb">true</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>  volumes:
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>    - name: secrets-store-inline
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>      csi:
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>        driver: secrets-store.csi.k8s.io
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>        readOnly: <span class="nb">true</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>        volumeAttributes:
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>          secretProviderClass: <span class="s2">&quot;akvprovider-demo&quot;</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>        nodePublishSecretRef:                       
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>          name: secrets-store-creds
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>oc apply -f aro-content/assets/azure-arc-pod.yaml
+</code></pre></div>
+<h3 id="validate-the-secrets">Validate the secrets<a class="headerlink" href="#validate-the-secrets" title="Permanent link">#</a></h3>
+<p>After the pod starts, the mounted content at the volume path specified in your deployment YAML is available.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1">## show secrets held in secrets-store</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>oc <span class="nb">exec</span> secret-store-pod -- ls /mnt/secrets-store/
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>DemoSecret
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1">## print a test secret &#39;DemoSecret&#39; held in secrets-store</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>oc <span class="nb">exec</span> secret-store-pod -- cat /mnt/secrets-store/DemoSecret
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>MyExampleSecret
+</code></pre></div>
+<h2 id="enable-log-aggregation">Enable log aggregation<a class="headerlink" href="#enable-log-aggregation" title="Permanent link">#</a></h2>
+<p>In order to collect logs from ARO cluster and store it in Azure ARC. configure azure monitor</p>
+<p>Create Azure Log Analytics Workspace
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>az monitor log-analytics workspace create --resource-group &lt;&lt;same as above&gt;&gt; --workspace-name loganalyticsworkspace
+</code></pre></div>
+Goto Azure ARC portal and click on <code>logs</code> </p>
+<p><img alt="Image" src="../Images/aro-arc-integration-image2.png" /></p>
+<p>Click on <code>configure azure monitor</code> button and select the workspace created in last step and click on configure.</p>
+<p><img alt="Image" src="../Images/aro-arc-integration-image3.png" /></p>
+<p>Now you can go see logs and metrics for your cluster.</p>
+<h2 id="monitor-aro-cluster-against-goverance-policies">Monitor ARO cluster against Goverance Policies<a class="headerlink" href="#monitor-aro-cluster-against-goverance-policies" title="Permanent link">#</a></h2>
+<p>Azure Policy extends Gatekeeper v3, an admission controller webhook for Open Policy Agent (OPA), to apply at-scale enforcements and safeguards on your clusters in a centralized, consistent manner. Azure Policy makes it possible to manage and report on the compliance state of your Kubernetes clusters from one place. The add-on enacts the following functions:
+- Checks with Azure Policy service for policy assignments to the cluster.
+- Deploys policy definitions into the cluster as constraint template and constraint custom resources.
+- Reports auditing and compliance details back to Azure Policy service.</p>
+<p>Azure policy plugin is enabled when you connect your ARO cluster with Azure ARC. 
+<img alt="Image" src="../Images/aro-arc-integration-image4.png" /></p>
+<p>you can click on <code>go to Azure Policies</code> to look at the policies assigned to your cluster, check their status and attach more policies.</p>
+<p><img alt="Image" src="../Images/aro-arc-integration-image5.png" /></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>

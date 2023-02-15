@@ -1,0 +1,878 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A workshop for Operations and Development teams on ARO.">
+      
+      
+        <meta name="author" content="Red Hat">
+      
+      
+        <link rel="canonical" href="https://ws.verynicecluster.cloud/app/2A-deploy-app/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.9">
+    
+    
+      
+        <title>Deploy and Expose an Application ( Part 1 ) - ARO Workshop</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.08040f6c.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,300i,400,400i,700,700i%7COverpass+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Overpass";--md-code-font:"Overpass Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="red">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#deploy-and-expose-an-application-part-1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ARO Workshop" class="md-header__button md-logo" aria-label="ARO Workshop" data-md-component="logo">
+      
+  <img src="../../favicon.ico" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ARO Workshop
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Deploy and Expose an Application ( Part 1 )
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/bizquigs/aro-workshop-content" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bizquigs/aro-hackathon-content
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ARO Workshop" class="md-nav__button md-logo" aria-label="ARO Workshop" data-md-component="logo">
+      
+  <img src="../../favicon.ico" alt="logo">
+
+    </a>
+    ARO Workshop
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/bizquigs/aro-workshop-content" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bizquigs/aro-hackathon-content
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Workshop Setup
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Workshop Setup" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Workshop Setup
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../general/1-workshop-setup/" class="md-nav__link">
+        Azure portal and CLI setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/1-3-get-credentials/" class="md-nav__link">
+        Retieve ARO Cluster Credentials
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Prepare the Cluster and Evironment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prepare the Cluster and Evironment" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Prepare the Cluster and Evironment
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/3-deploy-azure-service-operator/" class="md-nav__link">
+        Azure Service Operator
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/2-5-deploy-cosmos/" class="md-nav__link">
+        Deploy Cosmos Database
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Managing Worker Nodes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Managing Worker Nodes" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Managing Worker Nodes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/2-4-label-nodes/" class="md-nav__link">
+        Label Nodes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Deploy an Application
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deploy an Application" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Deploy an Application
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-1-deploy-frontend/" class="md-nav__link">
+        Deploy the frontend
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-2-deploy-backend/" class="md-nav__link">
+        Deploy the backend
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Make the application resilent
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Make the application resilent" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Make the application resilent
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/2-3-autoscaling.md" class="md-nav__link">
+        Setup cluster autoscaling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3-scale-app/" class="md-nav__link">
+        Make Applications Resilient
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          ARO Day X Operations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="ARO Day X Operations" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          ARO Day X Operations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/day2/upgrades/" class="md-nav__link">
+        Managing Upgrades
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-an-application" class="md-nav__link">
+    Deploy an application
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploy an application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#container-images" class="md-nav__link">
+    Container Images
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-build" class="md-nav__link">
+    Image Build
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-deployment" class="md-nav__link">
+    Image Deployment
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-the-application" class="md-nav__link">
+    Test the application
+  </a>
+  
+    <nav class="md-nav" aria-label="Test the application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#application-ip" class="md-nav__link">
+    Application IP
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/bizquigs/aro-workshop-content/edit/master/docs/app/2A-deploy-app.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="deploy-and-expose-an-application-part-1">Deploy and Expose an Application ( Part 1 )<a class="headerlink" href="#deploy-and-expose-an-application-part-1" title="Permanent link">#</a></h1>
+<p>Securing exposing an Internet facing application with an ARO Cluster.</p>
+<p>When you create a cluster on ARO you have several options in making the cluster public or private. With a public cluster you are allowing Internet traffic to the api and *.apps endpoints. With a private cluster you can make either or both the api and .apps endpoints private.</p>
+<p>How can you allow Internet access to an application running on your private cluster where the .apps endpoint is private? This document will guide you through using Azure Frontdoor to expose your applications to the Internet. There are several advantages of this approach, namely your cluster and all the resources in your Azure account can remain private, providing you an extra layer of security. Azure FrontDoor operates at the edge so we are controlling traffic before it even gets into your Azure account. On top of that, Azure FrontDoor also offers WAF and DDoS protection, certificate management and SSL Offloading just to name a few benefits.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>In this workshop we are using public clusters to simplify connectity to the environment.  Even though we are using a public cluster, the same methodology applies to expose an application to the Internet from a private cluster.  To similate a private cluster, we will be creating a 2nd private Ingress Controller.</p>
+</div>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">#</a></h2>
+<ul>
+<li>a unique USER ID</li>
+<li>Azure Database for PostgreSQL</li>
+<li>Azure Container Registry Instance and Password</li>
+<li>A public GitHub id ( only required for the 'Automate Deploying the App' )
+<br></li>
+</ul>
+<h2 id="deploy-an-application">Deploy an application<a class="headerlink" href="#deploy-an-application" title="Permanent link">#</a></h2>
+<p>Now the fun part, let's deploy an application!<br />
+We will be deploying a Java based application called <a href="https://github.com/redhat-mw-demos/microsweeper-quarkus/tree/ARO">microsweeper</a>.  This is an application that runs on OpenShift and uses a PostgreSQL database to store scores.  With ARO being a first class service on Azure, we will create an Azure Database for PostgreSQL service and connect it to our cluster with a private endpoint.</p>
+<p>Prerequisites - this part of the workshop assumes you have already created a Azure Database for PostgreSQL database named <USERID>-microsweeper-database that you created and configured in a previous step.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Throughout this tutorial, we will be distinguishing your application and resources based on a USERID assigned to you.  Please see a facilitator if they have not given you a USER ID.</p>
+</div>
+<p>From the Azure Cloud Shell, set an environment variable for your user id and the Azure Resource Group given to you by the facilitor:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span> <span class="nv">USERID</span><span class="o">=</span>&lt;The user ID a facilitator gave you&gt;
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span> <span class="nv">ARORG</span><span class="o">=</span>&lt;The Azure Resource Group a facilitator gave you&gt;
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span> <span class="nv">ARO_APP_FQDN</span><span class="o">=</span>minesweeper.<span class="nv">$USERID</span>.azure.mobb.ninja
+</code></pre></div>
+<p><strong>Clone the git repository</strong> </p>
+<p>The first thing we need to do is get a copy of the code that we will build and deploy to our clusters.  </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git clone https://github.com/rh-mobb/aro-hackaton-app
+</code></pre></div>
+<p><strong>Change to the root directory</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span> aro-hackaton-app
+</code></pre></div>
+<p><strong>Log into your openshift cluster with Azure Cloud Shell</strong></p>
+<p><strong>Switch to your OpenShift Project</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>oc project &lt;USER ID&gt;
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>As part of the workshop setup, an OpenShift project has been created using your USERID as the name of the project</p>
+</div>
+<p><strong>Add the OpenShift extension to quarkus</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>quarkus ext add openshift
+</code></pre></div>
+<p><strong>Edit aro-hackaton-app/src/main/resources/application.properties</strong></p>
+<p>Make sure your file looks like the one below, changing the following line:</p>
+<ul>
+<li><strong>%prod.quarkus.datasource.jdbc.url=jdbc:postgresql://<USERID>-minesweeper-database:5432/score</strong> <br>
+    Change the above line with your USERID for the database that has been already been configured for you<br><br></li>
+<li><strong>%prod.quarkus.container-image.group=<CHANGE TO YOUR NAMESPACE></strong>
+    Change the above line with your USERID for the namespace to deploy the application to</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Note the options in OpenShift Configurations.<br>
+- <strong>%prod.quarkus.openshift.deployment-kind=Deployment</strong> <br>
+  We will be creating a deployment for the application.<br><br>
+- <strong>%prod.quarkus.openshift.build-strategy=docker</strong> <br>
+  The application will be built uisng Docker.<br><br>
+- <strong>%prod.quarkus.container-image.group=minesweeper</strong> <br>
+  The application will use the namespace your facilitator assigned to you.<br><br>
+- <strong>%prod.quarkus.openshift.expose=true</strong> <br>
+  We will expose the route using the default openshift router domain - apps.\&lt;cluster-id>.eastus.aroapp.io</p>
+</div>
+<p>Sample microsweeper-quarkus/src/main/resources/application.properties</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a># Database configurations
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>%prod.quarkus.datasource.db-kind=postgresql
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>%prod.quarkus.datasource.jdbc.url=jdbc:postgresql://&lt;USERID&gt;-minesweeper-database:5432/score
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>%prod.quarkus.datasource.jdbc.driver=org.postgresql.Driver
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>%prod.quarkus.datasource.username=quarkus
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>%prod.quarkus.datasource.password=r3dh4t1!
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>%prod.quarkus.hibernate-orm.database.generation=drop-and-create
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>%prod.quarkus.hibernate-orm.database.generation=update
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a># OpenShift configurations
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>%prod.quarkus.kubernetes-client.trust-certs=true
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>%prod.quarkus.kubernetes.deploy=true
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>%prod.quarkus.kubernetes.deployment-target=openshift
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>#%prod.quarkus.kubernetes.deployment-target=knative
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>%prod.quarkus.openshift.build-strategy=docker
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>%prod.quarkus.openshift.expose=true
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>%prod.quarkus.openshift.deployment-kind=Deployment
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>%prod.quarkus.container-image.group=&lt;CHANGE TO YOUR NAMESPACE&gt;
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a># Serverless configurations
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>#%prod.quarkus.container-image.group=microsweeper-%prod.quarkus
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>#%prod.quarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a># macOS configurations
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>#%prod.quarkus.native.container-build=true
+</code></pre></div>
+<p><strong>Build and deploy the quarkus application to OpenShift.</strong></p>
+<p>One of the great things about OpenShift is the concept of Source to Image, where you simply point to your source code and OpenShift will build and deploy your application.  </p>
+<p>In this first example, we will be using source to image and build configs that come built in with Quarkus and OpenShift.  To start the build ( and deploy ) process simply run the following command.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>quarkus build --no-tests
+</code></pre></div>
+<p>Let's take a look at what this did along with everything that was created in your cluster.</p>
+<h3 id="container-images">Container Images<a class="headerlink" href="#container-images" title="Permanent link">#</a></h3>
+<p>Log into the OpenShift Console and from the Administrator perspective, expand Builds and then Image Streams, and select the minesweeper Project.</p>
+<p><img alt="Image" src="../images/image-stream-list.png" /></p>
+<p>You will see two images that were created on your behalf when you ran the quarkus build command.  There is one image for openjdk-11 that comes with OpenShift as a Universal Base Image (UBI) that the application will run under. With UBI, you get highly optimized and secure container images that you can build your applications with.   For more information on UBI please read this <a href="https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image">article</a></p>
+<p>The second image you see is the the microsweeper-appservice image.  This is the image for the application that was built automatically for you and pushed to the container registry that comes with OpenShift.</p>
+<h3 id="image-build">Image Build<a class="headerlink" href="#image-build" title="Permanent link">#</a></h3>
+<p>How did those images get built you ask?   Back on the OpenShift Console, click on Build Configs and then the microsweeper-appservice entry.
+<img alt="Image" src="../images/build-config-list.png" /></p>
+<p>When you ran the quarkus build command, this created the BuildConfig you can see here.  In our quarkus settings, we set the deployment strategy to build the image using Docker.  The Dockerfile file from the git repo that we cloned was used for this Build Config.  </p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+</div>
+<p>A build configuration describes a single build definition and a set of triggers for when a new build is created. Build configurations are defined by a BuildConfig, which is a REST object that can be used in a POST to the API server to create a new instance.</p>
+<p>You can read more about BuildConfigs <a href="https://docs.openshift.com/container-platform/4.11/cicd/builds/understanding-buildconfigs.html">here</a></p>
+<p>Once the BuildConfig was created, the source to image process kicked off a Build of that BuildConfig.  The build is what actually does the work in building and deploying the image.  We started with defining what to be built with the BuildConfig and then actually did the work with the Build.
+You can read more about Builds <a href="https://docs.openshift.com/container-platform/4.11/cicd/builds/understanding-image-builds.html">here</a></p>
+<p>To look at what the build actually did, click on Builds tab and then into the first Build in the list.
+<img alt="Image" src="../images/build-list.png" /></p>
+<p>On the next screen, explore around and look at the YAML definition of the build, Logs to see what the build actually did.  If you build failed for some reason, logs is a great first place to start to look at to debug what happened.
+<img alt="Image" src="../images/build-logs.png" /></p>
+<h3 id="image-deployment">Image Deployment<a class="headerlink" href="#image-deployment" title="Permanent link">#</a></h3>
+<p>After the image was built, the S2I process then deployed the application for us.  In the quarkus properties file, we specified that a deployment should be created.  You can view the deployment under Workloads, Deployments, and then click on the Deployment name.
+<img alt="Image" src="../images/deployment-list.png" /></p>
+<p>Explore around the deployment screen, check out the different tabs, look at the YAML that was created.
+<img alt="Image" src="../images/deployment-view.png" /></p>
+<p>Look at the pod the deployment created, and see that it is running.
+<img alt="Image" src="../images/deployment-pod.png" /></p>
+<p>The last thing we will look at is the Route that was created for our application.  In the quarkus properties file, we specified that the application should be exposed to the Internet.  When you create a Route, you have the option to specify a hostname.  To start with, we will just use the default domain that comes with ARO useast.aroapp.io in our case.  In next section, we will expose the same appplication to a custom domain leveraging Azure Front Door.</p>
+<p>You can read more about Routes <a href="https://docs.openshift.com/container-platform/4.11/networking/routes/route-configuration.html">here</a></p>
+<p>From the OpenShift menu, click on Networking, Routes, and the microsweeper-appservice route.
+<img alt="Image" src="../images/route-list.png" /></p>
+<h2 id="test-the-application">Test the application<a class="headerlink" href="#test-the-application" title="Permanent link">#</a></h2>
+<p>While in the Route section of the OpenShift UI, click the url under location:
+<img alt="Image" src="../images/route.png" /></p>
+<p>You can also get the the url for your application using the command line:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>oc get routes -o json <span class="p">|</span> jq -r <span class="s1">&#39;.items[0].spec.host&#39;</span>
+</code></pre></div></p>
+<p>Point your browser to the application!!
+<img alt="Image" src="../images/minesweeper.png" /></p>
+<h3 id="application-ip">Application IP<a class="headerlink" href="#application-ip" title="Permanent link">#</a></h3>
+<p>Let's take a quick look at what IP the application resolves to.  Back in your Cloud Shell environment, run
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>nslookup &lt;route host name&gt;
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>i.e. nslookup microsweeper-appservice-minesweeper.apps.fiehcjr1.eastus.aroapp.io
+</code></pre></div></p>
+<p>You should see results like the following:
+<img alt="Image" src="../images/nslookup.png" /></p>
+<p>Notice the IP address - can you guess where it comes from?</p>
+<p>It comes from the ARO Load Balancer.  In this workshop, we are using a Public Cluster which means the load balancer is exposed to the Internet.  If this was a private cluster, you would have to have connectivity to the VNET ARO is running on whether that be VPN, Express Route, or something else.</p>
+<p>To view the ARO load balancer, on the Azure Portal, Search for 'Load Balancers' and click on the Load balancers service.
+<img alt="Image" src="../images/load-balancers-search.png" /></p>
+<p>Scroll down the list of load balancers until you see the one with your cluster name.  You will notice two load balancers, one that has -internal in the name and one that does not.  The '*-internal' load balancer is used for the OpenShift API.  The other load balancer ( without -internal ) in the name is use the public load balancer used for the default Ingress Controller.  Click into the load balancer for applications.
+<img alt="Image" src="../images/load-balancers-list.png" /></p>
+<p>On the next screen, click on Frontend IP configuration.  Notice the IP address of the 2nd load balancer on the list.  This IP address matches what you found with the nslookup command.
+<img alt="Image" src="../images/load-balancers.png" /></p>
+<p>For the fun of it, we can also look at what backends this load balancer is connected to. Click into the 2nd load balancer on the list above, and then click into the first rule.
+<img alt="Image" src="../images/load-balancers-usedby.png" /></p>
+<p>On the next screen, notice the Backend pool.  This is the subnet that contains all the workers.  And the best part is all of this came with OpenShift and ARO!
+<img alt="Image" src="../images/load-balancers-backendpool.png" /></p>
+<p>Continue to <a href="../2B-deploy-app/">Part 2</a> of Deploy and Expose an App to expose the same application using a custom domain leveraging Azure Front Door.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>
