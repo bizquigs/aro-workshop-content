@@ -11,41 +11,45 @@ repo_url: https://github.com/bizquigs/aro-workshop-content
 # Nav Menu Definition
 nav:
   - Welcome: index.md
-  - Workshop Setup: general/1-workshop-setup.md
-  - Getting Started:
-    - Create an ARO Cluster: ops/1-1-create-cluster.md
-    - Retieve Cluster Credentials: ops/1-3-get-credentials.md
+  - Workshop Setup: 
+    - Azure portal and CLI setup: general/1-workshop-setup.md
+    - Retieve ARO Cluster Credentials: ops/1-3-get-credentials.md
+  #- Getting Started:
+  #  - Create an ARO Cluster: ops/1-1-create-cluster.md
+  #  - Retieve Cluster Credentials: ops/1-3-get-credentials.md
   - Prepare the Cluster and Evironment:
-    - Install Pipelines and Service Mesh Operators:
-      - Deploy Pipeline Operator: ops/2-1-operators.md
-      - Deploy Service Mesh Operator: service-meshv2/0-infrastructure_operator_install.md
-    - Label Nodes: ops/2-4-label-nodes.md
+  #  - Install Pipelines and Service Mesh Operators:
+  #    - Deploy Pipeline Operator: ops/2-1-operators.md
+  #    - Deploy Service Mesh Operator: service-meshv2/0-infrastructure_operator_install.md
+  #  - Label Nodes: ops/2-4-label-nodes.md
     - Azure Service Operator: ops/3-deploy-azure-service-operator.md
     - Deploy Cosmos Database: ops/2-5-deploy-cosmos.md
-    - Azure ARC Integration: ops/5-arc-integration.md
-  - Managing Worker Nodes: ops/2-2-worker-nodes.md
+  #  - Azure ARC Integration: ops/5-arc-integration.md
+  #- Managing Worker Nodes: ops/2-2-worker-nodes.md
+  - Managing Worker Nodes: 
+    - Label Nodes: ops/2-4-label-nodes.md
   - Deploy an Application:
     - Deploy the frontend: app/2-1-deploy-frontend.md
     - Deploy the backend: app/2-2-deploy-backend.md
-    - Test the application app/2-3-test-app.md
+ #   - Test the application: app/2-3-test-app.md
   - Make the application resilent:
     - Setup cluster autoscaling: ops/2-3-autoscaling.md
-    - Make Applications Resilient: 
-        - Scale the application: app/3-scale-app.md
-        - Create a Pod Disruption Budget: app/3-scale-app.md
-        - Scale down the application: app/3-scale-app.md
-  - Exposing Applications:
-    - Create a private ingress controller: app/4-private-ingress.md
-    - Create Azure Front Door Service: ops/5-frontdoor.md
-    - Expose the application: app/2A-deploy-app.md
-  - Automate Deploying an Application:
-    - Automate Deploying the App: app/2C-deploy-app.md
-  - Advanced Application Configuration with Service Mesh:
-      - Introduction: service-meshv2/00-introduction.md
-      - Deploy Weighted Load Balancing: service-meshv2/3-weighted-routing.md
-      - Access Kiali Dashboard: service-meshv2/access_kiali_dashboard.md
+    - Make Applications Resilient: app/3-scale-app.md
+ #      - Scale the application: app/3-scale-app.md
+ #       - Create a Pod Disruption Budget: app/3-scale-app.md
+ #      - Scale down the application: app/3-scale-app.md
+ # - Exposing Applications:
+ #   - Create a private ingress controller: app/4-private-ingress.md
+ #   - Create Azure Front Door Service: ops/5-frontdoor.md
+ #   - Expose the application: app/2A-deploy-app.md
+ # - Automate Deploying an Application:
+ #   - Automate Deploying the App: app/2C-deploy-app.md
+ # - Advanced Application Configuration with Service Mesh:
+ #     - Introduction: service-meshv2/00-introduction.md
+ #     - Deploy Weighted Load Balancing: service-meshv2/3-weighted-routing.md
+ #     - Access Kiali Dashboard: service-meshv2/access_kiali_dashboard.md
   - ARO Day X Operations:
-      - Managing Upgrades: ops/2-1-upgrades.md
+      - Managing Upgrades: ops/day2/upgrades.md
     
 
 # Theme Configuration
