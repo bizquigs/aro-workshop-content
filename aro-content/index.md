@@ -1,3 +1,4 @@
+![home-page-image](./assets/images/OpenShift_ARO_UPDATE.jpg){ align=center }
 ![home-page-image](./assets/images/carahsoft-header.png){ align=center }
 
 ## Overview
