@@ -4,11 +4,11 @@
 ## Overview
 Join Red Hat® and Microsoft for a hands-on workshop with Azure Red Hat OpenShift® (ARO). During the event, Red Hat Cloud Services experts will guide you through the ARO architecture and answer your questions. The workshop will cover both Operations and Developer activities, and will give the user a feel for how ARO will work for your team and workloads.
 
-**Who should attend:** This full-day, in-person workshop is ideal for developers, architects and operations engineers who need a flexible and proven platform to build, deploy and scale applications.
+**Who should attend:** This in-person workshop is ideal for developers, architects and operations engineers who need a flexible and proven platform to build, deploy and scale applications.
 
-**What to expect:** During the workshop, we will take you through one of two content tracks to help you understand some of the concepts of deploying container-based applications on Azure Red Hat OpenShift and how to operate an Azure Red Hat OpenShift cluster. We will cover the following:
+**What to expect:** During the workshop, we will guide you through content to help you understand some of the concepts of deploying container-based applications on Azure Red Hat OpenShift and how to operate an Azure Red Hat OpenShift cluster. We will cover the following:
 
-### Operations track:
+### Content Overview:
 
 - Complete Day 2 operations tasks such as configuring node and cluster scaling policies, configuring managed upgrades, and using labels for deterministic app placement on nodes
 - Learn how to leverage Azure Service Operator to manage and use Azure Services directly from OpenShift
