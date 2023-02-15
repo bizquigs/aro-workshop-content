@@ -14,9 +14,6 @@ Join Red Hat® and Microsoft for a hands-on workshop with Azure Red Hat OpenShif
 - Learn how to leverage Azure Service Operator to manage and use Azure Services directly from OpenShift
 - Deploy an application using CI/CD and expose the application using the Azure Front Door Service
 - Use Azure Arc for logging and monitoring of OpenShift and containerized applications
-
-### Development track:
-
 - Deploy an application that uses an Azure Managed Database
 - Learn how to use OpenShift Service Mesh for application observability and tracing
 - Make an application on OpenShift scalable and resistant to node failures and upgrades
